@@ -9,7 +9,7 @@ namespace AdventOfCode2024 {
         public static void LoadLists(string path, out List<int> list1, out List<int> list2) {
             list1 = [];
             list2 = [];
-            string line = string.Empty;
+            string? line = string.Empty;
             try {
                 using (StreamReader sr = new StreamReader(path)) {
                     while ((line = sr.ReadLine()) != null) {
@@ -28,24 +28,15 @@ namespace AdventOfCode2024 {
             List<int> list1 = [];
             List<int> list2 = [];
             LoadLists(path, out list1, out list2);
-            while(list1.Count > 0 ) {
-                var smallest1 = -1;
-                var smallestIndex1 = -1;
-                var smallest2 = -1;
-                var smallestIndex2 = -1;
-                for(int i = 0; i < list1.Count; i++) {
-                    if(smallest1 == -1 || list1[i] < smallest1) {
-                        smallest1 = list1[i];
-                        smallestIndex1 = i;
-                    }
-                    if(smallest2 == -1 || list2[i] < smallest2) {
-                        smallest2 = list2[i];
-                        smallestIndex2 = i;
-                    }
-                }
-                total += Math.Abs(list1[smallestIndex1] - list2[smallestIndex2]);
-                list1.RemoveAt(smallestIndex1);
-                list2.RemoveAt(smallestIndex2);
+            list1.Sort();
+            list2.Sort();
+            var stack1 = new Stack<int>(list1);
+            var stack2 = new Stack<int>(list2);
+            
+            while(stack1.Count > 0) {
+                var item1 = stack1.Pop();
+                var item2 = stack2.Pop();
+                total += Math.Abs(item1 - item2);
             }
             Console.WriteLine(total);
         }
